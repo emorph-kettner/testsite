@@ -263,6 +263,23 @@ body {
     text-align: center;
 }
 
+.consultant-photo {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #fdb128;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    margin: 0 auto 2rem;
+    display: block;
+}
+
+.consultant-photo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
 .profile-placeholder {
     width: 250px;
     height: 250px;
@@ -507,7 +524,7 @@ body {
             <h2 class="section-title">Meet Your Consultant</h2>
             <div class="about-content">
                 <div class="about-image">
-                    <div class="profile-placeholder">👨‍💼</div>
+                    <img src="consultant.jpg" alt="Kris - Emorph IT Consultant" class="consultant-photo">
                 </div>
                 <div class="about-text">
                     <p>Kris is a certified Microsoft consultant with deep expertise in Azure enterprise applications, identity solutions, and IT infrastructure design. With a methodical approach to problem-solving and a passion for helping businesses thrive, Kris brings clarity to complex environments and drives meaningful outcomes with every engagement.</p>
