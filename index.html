@@ -186,6 +186,12 @@ body {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
 /* Services Section */
 .services {
     padding: 4rem 2rem;
@@ -344,6 +350,7 @@ body {
     background: linear-gradient(135deg, #5b16e4, #331088);
     color: white;
 }
+
 .contact .section-title {
     color: #ffffff;
 }
@@ -405,6 +412,79 @@ body {
     font-size: 1.5rem;
 }
 
+/* Alert Messages */
+.alert {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    display: none;
+}
+
+.alert.show {
+    display: block;
+    animation: slideInUp 0.3s ease-out;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+/* Loading State */
+.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #ffffff;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* reCAPTCHA specific styles */
+.recaptcha-container {
+    margin: 1rem 0;
+}
+
+.recaptcha-error {
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    display: none;
+}
+
+.recaptcha-error.show {
+    display: block;
+}
+
 /* Animations */
 @keyframes slideInUp {
     from {
@@ -461,7 +541,6 @@ body {
         height: 40px;
     }
 }
-
     </style>
 </head>
 <body>
@@ -469,7 +548,7 @@ body {
     <header class="header">
         <div class="header-content">
             <div class="logo-section">
-                <img src="logo.png" alt="Emorph IT Logo" class="logo-image">
+                <img src="logo.png" alt="Emorph IT Logo" class="logo-image" onerror="this.style.display='none'">
                 <div class="logo-text">
                     <div class="logo">Emorph IT</div>
                     <div class="tagline">Certified Expertise. Unmatched Precision. Trusted Results.</div>
@@ -526,7 +605,8 @@ body {
             <h2 class="section-title">Meet Your Consultant</h2>
             <div class="about-content">
                 <div class="about-image">
-                    <img src="consultant.jpg" alt="Kris - Emorph IT Consultant" class="consultant-photo">
+                    <img src="consultant.jpg" alt="Kris - Emorph IT Consultant" class="consultant-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="profile-placeholder" style="display: none;">👨‍💼</div>
                 </div>
                 <div class="about-text">
                     <p>Kris is a certified Microsoft consultant with deep expertise in Azure enterprise applications, identity solutions, and IT infrastructure design. With a methodical approach to problem-solving and a passion for helping businesses thrive, Kris brings clarity to complex environments and drives meaningful outcomes with every engagement.</p>
@@ -556,23 +636,34 @@ body {
             <h2 class="section-title">Let's Connect</h2>
             <div class="contact-content">
                 <div class="contact-form">
-                    <form>
+                    <!-- Alert container -->
+                    <div id="alert-container"></div>
+                    
+                    <form id="contact-form" novalidate>
                         <div class="form-group">
-                            <label for="name">Name</label>
+                            <label for="name">Name <span style="color: #fdb128;">*</span></label>
                             <input type="text" id="name" name="name" required>
+                            <div class="field-error" id="name-error"></div>
                         </div>
                         <div class="form-group">
-                            <label for="email">Email</label>
+                            <label for="email">Email <span style="color: #fdb128;">*</span></label>
                             <input type="email" id="email" name="email" required>
+                            <div class="field-error" id="email-error"></div>
                         </div>
                         <div class="form-group">
-                            <label for="message">Message</label>
+                            <label for="message">Message <span style="color: #fdb128;">*</span></label>
                             <textarea id="message" name="message" rows="5" required></textarea>
+                            <div class="field-error" id="message-error"></div>
                         </div>
                         <div class="form-group">
-                            <div class="g-recaptcha" data-sitekey="6LdNPI4rAAAAALN7SNAP6A2z8wzjGECFT5pMHJmT"></div>
+                            <div class="recaptcha-container">
+                                <div class="g-recaptcha" data-sitekey="6LdNPI4rAAAAALN7SNAP6A2z8wzjGECFT5pMHJmT" data-callback="onRecaptchaSuccess" data-expired-callback="onRecaptchaExpired" data-error-callback="onRecaptchaError"></div>
+                                <div class="recaptcha-error" id="recaptcha-error">Please complete the reCAPTCHA verification.</div>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <button type="submit" class="btn btn-primary" id="submit-btn">
+                            <span id="submit-text">Send Message</span>
+                        </button>
                     </form>
                 </div>
                 <div class="contact-info">
@@ -590,6 +681,257 @@ body {
     </section>
 	
     <script>
+        // Global variables for form management
+        let recaptchaCompleted = false;
+        let formSubmitting = false;
+
+        // reCAPTCHA callback functions
+        function onRecaptchaSuccess(response) {
+            recaptchaCompleted = true;
+            hideRecaptchaError();
+            console.log('reCAPTCHA completed successfully');
+        }
+
+        function onRecaptchaExpired() {
+            recaptchaCompleted = false;
+            showRecaptchaError('reCAPTCHA has expired. Please verify again.');
+            console.log('reCAPTCHA expired');
+        }
+
+        function onRecaptchaError() {
+            recaptchaCompleted = false;
+            showRecaptchaError('reCAPTCHA error occurred. Please try again.');
+            console.log('reCAPTCHA error');
+        }
+
+        // Utility functions for reCAPTCHA error handling
+        function showRecaptchaError(message = 'Please complete the reCAPTCHA verification.') {
+            const errorEl = document.getElementById('recaptcha-error');
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+        }
+
+        function hideRecaptchaError() {
+            const errorEl = document.getElementById('recaptcha-error');
+            errorEl.classList.remove('show');
+        }
+
+        // Form validation functions
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function validateForm() {
+            let isValid = true;
+            const fields = {
+                name: document.getElementById('name'),
+                email: document.getElementById('email'),
+                message: document.getElementById('message')
+            };
+
+            // Clear previous errors
+            Object.keys(fields).forEach(key => {
+                const errorEl = document.getElementById(`${key}-error`);
+                if (errorEl) {
+                    errorEl.textContent = '';
+                    errorEl.style.display = 'none';
+                }
+                fields[key].style.borderColor = '';
+            });
+
+            // Validate name
+            if (!fields.name.value.trim()) {
+                showFieldError('name', 'Name is required.');
+                isValid = false;
+            } else if (fields.name.value.trim().length < 2) {
+                showFieldError('name', 'Name must be at least 2 characters long.');
+                isValid = false;
+            }
+
+            // Validate email
+            if (!fields.email.value.trim()) {
+                showFieldError('email', 'Email is required.');
+                isValid = false;
+            } else if (!validateEmail(fields.email.value.trim())) {
+                showFieldError('email', 'Please enter a valid email address.');
+                isValid = false;
+            }
+
+            // Validate message
+            if (!fields.message.value.trim()) {
+                showFieldError('message', 'Message is required.');
+                isValid = false;
+            } else if (fields.message.value.trim().length < 10) {
+                showFieldError('message', 'Message must be at least 10 characters long.');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function showFieldError(fieldName, message) {
+            const field = document.getElementById(fieldName);
+            const errorEl = document.getElementById(`${fieldName}-error`);
+            
+            if (errorEl) {
+                errorEl.textContent = message;
+                errorEl.style.display = 'block';
+                errorEl.style.color = '#ff6b6b';
+                errorEl.style.fontSize = '0.9rem';
+                errorEl.style.marginTop = '0.5rem';
+            }
+            
+            if (field) {
+                field.style.borderColor = '#ff6b6b';
+                field.focus();
+            }
+        }
+
+        // Alert system
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alert-container');
+            const alertEl = document.createElement('div');
+            alertEl.className = `alert alert-${type}`;
+            alertEl.textContent = message;
+            
+            // Clear existing alerts
+            alertContainer.innerHTML = '';
+            alertContainer.appendChild(alertEl);
+            
+            // Show the alert
+            setTimeout(() => alertEl.classList.add('show'), 100);
+            
+            // Auto-hide after 5 seconds for success messages
+            if (type === 'success') {
+                setTimeout(() => {
+                    alertEl.classList.remove('show');
+                    setTimeout(() => alertContainer.removeChild(alertEl), 300);
+                }, 5000);
+            }
+        }
+
+        // Form submission handling
+        function handleFormSubmission(formData) {
+            // Simulate form processing (replace with actual server endpoint)
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    // Simulate success (in real implementation, this would be an actual API call)
+                    const success = Math.random() > 0.1; // 90% success rate for demo
+                    
+                    if (success) {
+                        resolve({
+                            success: true,
+                            message: 'Thank you for your message! We\'ll get back to you within 24 hours.'
+                        });
+                    } else {
+                        reject({
+                            success: false,
+                            message: 'There was an error sending your message. Please try again.'
+                        });
+                    }
+                }, 2000); // Simulate network delay
+            });
+        }
+
+        // Main form event handler
+        document.getElementById('contact-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Prevent multiple submissions
+            if (formSubmitting) {
+                return;
+            }
+
+            // Validate form fields
+            if (!validateForm()) {
+                showAlert('Please correct the errors above.', 'error');
+                return;
+            }
+
+            // Check reCAPTCHA
+            if (!recaptchaCompleted) {
+                showRecaptchaError();
+                showAlert('Please complete the reCAPTCHA verification.', 'warning');
+                return;
+            }
+
+            // Verify reCAPTCHA response exists
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse || recaptchaResponse.length === 0) {
+                showRecaptchaError('reCAPTCHA verification failed. Please try again.');
+                showAlert('reCAPTCHA verification failed. Please try again.', 'error');
+                return;
+            }
+
+            // Set loading state
+            formSubmitting = true;
+            const submitBtn = document.getElementById('submit-btn');
+            const submitText = document.getElementById('submit-text');
+            
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            submitText.textContent = 'Sending...';
+
+            try {
+                // Collect form data
+                const formData = new FormData(this);
+                formData.append('g-recaptcha-response', recaptchaResponse);
+
+                // Submit form (this is where you'd make the actual server request)
+                const result = await handleFormSubmission(formData);
+                
+                // Success handling
+                showAlert(result.message, 'success');
+                this.reset(); // Clear form
+                grecaptcha.reset(); // Reset reCAPTCHA
+                recaptchaCompleted = false;
+                
+            } catch (error) {
+                // Error handling
+                console.error('Form submission error:', error);
+                showAlert(error.message || 'An unexpected error occurred. Please try again.', 'error');
+                
+            } finally {
+                // Reset button state
+                formSubmitting = false;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+                submitText.textContent = 'Send Message';
+            }
+        });
+
+        // Real-time field validation
+        ['name', 'email', 'message'].forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            if (field) {
+                field.addEventListener('blur', function() {
+                    // Only validate if field has content
+                    if (this.value.trim()) {
+                        validateForm();
+                    }
+                });
+                
+                // Clear error on input
+                field.addEventListener('input', function() {
+                    const errorEl = document.getElementById(`${fieldName}-error`);
+                    if (errorEl && errorEl.style.display === 'block') {
+                        errorEl.style.display = 'none';
+                        this.style.borderColor = '';
+                    }
+                });
+            }
+        });
+
+        // reCAPTCHA load error handling
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                if (typeof grecaptcha === 'undefined') {
+                    showAlert('reCAPTCHA failed to load. Please check your internet connection and refresh the page.', 'error');
+                }
+            }, 5000);
+        });
+
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -616,25 +958,6 @@ body {
             }
         });
 
-        // Form submission handling with reCAPTCHA validation
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Check if reCAPTCHA is completed
-            const recaptchaResponse = grecaptcha.getResponse();
-            
-            if (recaptchaResponse.length === 0) {
-                alert('Please complete the reCAPTCHA verification.');
-                return;
-            }
-            
-            // Here you would typically send the form data to your server
-            // For now, we'll just show a success message
-            alert('Thank you for your message! We\'ll get back to you soon.');
-            this.reset();
-            grecaptcha.reset(); // Reset the reCAPTCHA
-        });
-
         // Add entrance animations on scroll
         const observerOptions = {
             threshold: 0.1,
@@ -653,6 +976,202 @@ body {
         document.querySelectorAll('.service-card, .testimonial-card').forEach(el => {
             observer.observe(el);
         });
+
+        // Enhanced error handling for network issues
+        window.addEventListener('online', function() {
+            showAlert('Connection restored. You can now submit the form.', 'success');
+        });
+
+        window.addEventListener('offline', function() {
+            showAlert('No internet connection. Please check your connection before submitting.', 'warning');
+        });
+
+        // Additional reCAPTCHA utilities
+        function resetRecaptcha() {
+            if (typeof grecaptcha !== 'undefined') {
+                try {
+                    grecaptcha.reset();
+                    recaptchaCompleted = false;
+                    hideRecaptchaError();
+                } catch (error) {
+                    console.error('Error resetting reCAPTCHA:', error);
+                }
+            }
+        }
+
+        // Enhanced form reset function
+        function resetContactForm() {
+            const form = document.getElementById('contact-form');
+            const alertContainer = document.getElementById('alert-container');
+            
+            // Reset form fields
+            form.reset();
+            
+            // Clear all error messages
+            ['name', 'email', 'message'].forEach(fieldName => {
+                const field = document.getElementById(fieldName);
+                const errorEl = document.getElementById(`${fieldName}-error`);
+                
+                if (field) {
+                    field.style.borderColor = '';
+                }
+                
+                if (errorEl) {
+                    errorEl.style.display = 'none';
+                    errorEl.textContent = '';
+                }
+            });
+            
+            // Clear alerts
+            alertContainer.innerHTML = '';
+            
+            // Reset reCAPTCHA
+            resetRecaptcha();
+            
+            // Reset button state
+            const submitBtn = document.getElementById('submit-btn');
+            const submitText = document.getElementById('submit-text');
+            
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('loading');
+            submitText.textContent = 'Send Message';
+            
+            formSubmitting = false;
+        }
+
+        // Keyboard accessibility improvements
+        document.addEventListener('keydown', function(e) {
+            // Allow Escape key to clear form
+            if (e.key === 'Escape') {
+                const activeElement = document.activeElement;
+                if (activeElement && activeElement.closest('#contact-form')) {
+                    if (confirm('Clear the form and reset all fields?')) {
+                        resetContactForm();
+                    }
+                }
+            }
+        });
+
+        // Form field character limits and feedback
+        const messageField = document.getElementById('message');
+        if (messageField) {
+            // Add character counter
+            const charCounter = document.createElement('div');
+            charCounter.style.cssText = 'font-size: 0.8rem; color: #666; text-align: right; margin-top: 0.5rem;';
+            charCounter.id = 'char-counter';
+            messageField.parentNode.appendChild(charCounter);
+            
+            messageField.addEventListener('input', function() {
+                const length = this.value.length;
+                const maxLength = 1000; // Set reasonable limit
+                
+                charCounter.textContent = `${length}/${maxLength} characters`;
+                
+                if (length > maxLength) {
+                    charCounter.style.color = '#ff6b6b';
+                    this.style.borderColor = '#ff6b6b';
+                } else if (length > maxLength * 0.8) {
+                    charCounter.style.color = '#fdb128';
+                    this.style.borderColor = '';
+                } else {
+                    charCounter.style.color = '#666';
+                    this.style.borderColor = '';
+                }
+            });
+        }
+
+        // Auto-save form data to prevent loss (using sessionStorage as fallback)
+        function saveFormData() {
+            if (typeof Storage !== 'undefined') {
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    message: document.getElementById('message').value,
+                    timestamp: Date.now()
+                };
+                
+                try {
+                    sessionStorage.setItem('emorphit_contact_form', JSON.stringify(formData));
+                } catch (e) {
+                    console.log('SessionStorage not available');
+                }
+            }
+        }
+
+        function loadFormData() {
+            if (typeof Storage !== 'undefined') {
+                try {
+                    const saved = sessionStorage.getItem('emorphit_contact_form');
+                    if (saved) {
+                        const formData = JSON.parse(saved);
+                        const age = Date.now() - formData.timestamp;
+                        
+                        // Only restore if less than 1 hour old
+                        if (age < 3600000) {
+                            document.getElementById('name').value = formData.name || '';
+                            document.getElementById('email').value = formData.email || '';
+                            document.getElementById('message').value = formData.message || '';
+                            
+                            if (formData.name || formData.email || formData.message) {
+                                showAlert('Previous form data restored.', 'success');
+                            }
+                        } else {
+                            sessionStorage.removeItem('emorphit_contact_form');
+                        }
+                    }
+                } catch (e) {
+                    console.log('Error loading form data:', e);
+                }
+            }
+        }
+
+        function clearFormData() {
+            if (typeof Storage !== 'undefined') {
+                try {
+                    sessionStorage.removeItem('emorphit_contact_form');
+                } catch (e) {
+                    console.log('Error clearing form data:', e);
+                }
+            }
+        }
+
+        // Save form data on input
+        ['name', 'email', 'message'].forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            if (field) {
+                field.addEventListener('input', debounce(saveFormData, 1000));
+            }
+        });
+
+        // Debounce utility function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Load saved form data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFormData();
+        });
+
+        // Clear saved data on successful submission or manual reset
+        const originalHandleFormSubmission = handleFormSubmission;
+        window.handleFormSubmission = function(formData) {
+            return originalHandleFormSubmission(formData).then(result => {
+                clearFormData(); // Clear saved data on success
+                return result;
+            });
+        };
+
+        // Initialize form state
+        console.log('Enhanced reCAPTCHA form initialized successfully');
     </script>
 </body>
 </html>
