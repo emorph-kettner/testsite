@@ -349,9 +349,8 @@ body {
 }
 
 .contact-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+    display: flex;
+    justify-content: center;
 }
 
 .contact-form {
@@ -359,6 +358,8 @@ body {
     padding: 2rem;
     border-radius: 15px;
     backdrop-filter: blur(10px);
+    max-width: 600px;
+    width: 100%;
 }
 
 .form-group {
@@ -389,20 +390,18 @@ body {
     box-shadow: 0 0 0 3px rgba(253, 177, 40, 0.3);
 }
 
-.contact-info {
+/* Masthead Section */
+.masthead {
     padding: 2rem 0;
+    background: white;
+    text-align: center;
 }
 
-.contact-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    font-size: 1.1rem;
-}
-
-.contact-item span {
-    margin-right: 1rem;
-    font-size: 1.5rem;
+.masthead-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 /* Animations */
@@ -446,8 +445,8 @@ body {
         text-align: center;
     }
 
-    .contact-content {
-        grid-template-columns: 1fr;
+    .contact-form {
+        margin: 0 1rem;
     }
 
     .logo-section {
@@ -575,17 +574,14 @@ body {
                         <button type="submit" class="btn btn-primary">Send Message</button>
                     </form>
                 </div>
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <span>📧</span>
-                        <span>kris@emorphit.com</span>
-                    </div>
-                    <div class="contact-item">
-                        <span>🌐</span>
-                        <span>www.emorphit.com</span>
-                    </div>
-                </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Masthead Section -->
+    <section class="masthead">
+        <div class="container">
+            <img src="masthead.png" alt="Emorph IT Masthead" class="masthead-image">
         </div>
     </section>
 	
