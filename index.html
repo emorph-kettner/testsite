@@ -469,7 +469,192 @@ body {
     max-width: 100%;
     height: auto;
     border-radius: 10px;
-    /*box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    /*box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);*/
+}
+
+/* Footer Styles */
+.footer {
+    background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+    color: white;
+    padding: 3rem 0 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="footergrid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23footergrid)"/></svg>');
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.footer-main {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 2rem;
+}
+
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-brand .logo-section {
+    margin-bottom: 1.5rem;
+}
+
+.footer-brand .logo {
+    font-size: 1.8rem;
+    background: linear-gradient(45deg, #5b16e4, #fdb128);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.footer-brand .tagline {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+}
+
+.footer-description {
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.social-link:hover {
+    background: linear-gradient(45deg, #fdb128, #5b16e4);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.footer-section h4 {
+    color: #fdb128;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.footer-links a:hover {
+    color: #fdb128;
+    padding-left: 5px;
+}
+
+.contact-info {
+    list-style: none;
+}
+
+.contact-info li {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.contact-info .icon {
+    width: 16px;
+    height: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fdb128;
+    font-size: 0.9rem;
+}
+
+.footer-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    margin: 2rem 0 1rem;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+.footer-legal {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.footer-legal a {
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-legal a:hover {
+    color: #fdb128;
+}
+
+.certifications {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.cert-badge {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: #fdb128;
+    border: 1px solid rgba(253, 177, 40, 0.3);
+    backdrop-filter: blur(5px);
 }
 
 /* Animations */
@@ -540,6 +725,43 @@ body {
     .logo-image {
         width: 40px;
         height: 40px;
+    }
+
+    /* Footer Mobile Responsiveness */
+    .footer-main {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .footer-legal {
+        justify-content: center;
+    }
+
+    .certifications {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-main {
+        gap: 1.5rem;
+    }
+    
+    .footer-legal {
+        flex-direction: column;
+        gap: 0.5rem;
     }
 }
 
@@ -694,71 +916,44 @@ body {
             <img src="masthead.png" alt="Emorph IT Masthead" class="masthead-image">
         </div>
     </section>
-	
-    <script>
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
 
-        // Add scroll effect to header
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('.header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(255, 255, 255, 0.95)';
-                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.15)';
-            } else {
-                header.style.background = 'white';
-                header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
-            }
-        });
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <div class="logo-section">
+                        <img src="logo.png" alt="Emorph IT Logo" class="logo-image">
+                        <div class="logo-text">
+                            <div class="logo">Emorph IT</div>
+                            <div class="tagline">Certified Expertise. Unmatched Precision. Trusted Results.</div>
+                        </div>
+                    </div>
+                    <p class="footer-description">
+                        Transforming business complexity into streamlined IT solutions. We specialize in cloud integration, identity management, and enterprise system optimization to help your organization thrive in the digital landscape.
+                    </p>
+                    <div class="certifications">
+                        <span class="cert-badge">Microsoft Certified</span>
+                        <span class="cert-badge">Azure Expert</span>
+                    </div>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <span>💼</span>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <span>🐦</span>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Email">
+                            <span>✉️</span>
+                        </a>
+                    </div>
+                </div>
 
-        // Form submission handling with reCAPTCHA validation
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Check if reCAPTCHA is completed
-            const recaptchaResponse = grecaptcha.getResponse();
-            
-            if (recaptchaResponse.length === 0) {
-                alert('Please complete the reCAPTCHA verification.');
-                return;
-            }
-            
-            // Here you would typically send the form data to your server
-            // For now, we'll just show a success message
-            alert('Thank you for your message! We\'ll get back to you soon.');
-            this.reset();
-            grecaptcha.reset(); // Reset the reCAPTCHA
-        });
-
-        // Add entrance animations on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animation = 'slideInUp 0.8s ease-out forwards';
-                }
-            });
-        }, observerOptions);
-
-        // Observe service cards and other elements
-        document.querySelectorAll('.service-card, .testimonial-card, .logo-item').forEach(el => {
-            observer.observe(el);
-        });
-    </script>
-</body>
-</html>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="#services">Cloud Integration</a></li>
+                        <li><a href="#services">Identity Management</a></li>
+                        <li><a href="#services">Azure Consulting</a></li>
+                        <li><a href="#services">System Optimization</a></li>
+                        <li><a href="#services">IT
