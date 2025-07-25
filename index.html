@@ -693,6 +693,77 @@ body {
     backdrop-filter: blur(5px);
 }
 
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Add offset for fixed header */
+section {
+    scroll-margin-top: 80px;
+}
+
+/* Privacy and Terms Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.close:hover,
+.close:focus {
+    color: #5b16e4;
+    text-decoration: none;
+}
+
+.modal h2 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    padding-right: 40px;
+}
+
+.modal p, .modal ul {
+    margin-bottom: 1rem;
+    color: #333;
+    line-height: 1.6;
+}
+
+.modal ul {
+    padding-left: 1.5rem;
+}
+
 /* Animations */
 @keyframes slideInUp {
     from {
@@ -773,6 +844,12 @@ body {
     .certifications {
         justify-content: center;
         flex-wrap: wrap;
+    }
+
+    .modal-content {
+        margin: 10% auto;
+        width: 95%;
+        padding: 1.5rem;
     }
 }
 
@@ -865,7 +942,7 @@ body {
     </section>
 
     <!-- Client Logos Section -->
-    <section class="client-logos">
+    <section class="client-logos" id="clients">
         <div class="container">
             <h2 class="section-title">Trusted by Leading Organizations</h2>
             <div class="logos-grid">
@@ -893,7 +970,7 @@ body {
     </section>
 
     <!-- Testimonials Section -->
-    <section class="testimonials">
+    <section class="testimonials" id="testimonials">
         <div class="container">
             <h2 class="section-title">What Clients Say</h2>
             <div class="testimonial-card">
@@ -916,77 +993,4 @@ body {
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" rows="5" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <div class="g-recaptcha" data-sitekey="6LfxPo4rAAAAAJZhNUXu6l142mz1dfCTrHkKM1PD"></div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Masthead Section -->
-    <section class="masthead">
-        <div class="container">
-            <img src="masthead.png" alt="Emorph IT Masthead" class="masthead-image">
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-main">
-                <div class="footer-brand">
-                    <div class="logo-section">
-                        <img src="logo.png" alt="Emorph IT Logo" class="logo-image">
-                        <div class="logo-text">
-                            <div class="logo">Emorph IT</div>
-                            <div class="tagline">Certified Expertise. Unmatched Precision. Trusted Results.</div>
-                        </div>
-                    </div>
-                    <p class="footer-description">
-                        Transforming business complexity into streamlined IT solutions. We specialize in cloud integration, identity management, and enterprise system optimization to help your organization thrive in the digital landscape.
-                    </p>
-
-                </div>
-
-                <div class="footer-section">
-                    <h4>Services</h4>
-                    <ul class="footer-links">
-                        <li><a href="#services">Cloud Integration</a></li>
-                        <li><a href="#services">Identity Management</a></li>
-                        <li><a href="#services">System Optimization</a></li>
-                        <li><a href="#services">IT Infrastructure</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h4>Company</h4>
-                    <ul class="footer-links">
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                        <li><a href="#testimonials">Testimonials</a></li>
-                        <li><a href="#clients">Our Clients</a></li>
-                    </ul>
-                </div>
-
-            </div>
-
-            <div class="footer-divider"></div>
-
-            <div class="footer-bottom">
-                <div class="copyright">
-                    <p>&copy; 2025 Emorph IT. All rights reserved.</p>
-                </div>
-                <div class="footer-legal">
-                    <a href="#privacy">Privacy Policy</a>
-                    <a href="#terms">Terms of Use</a>
-                </div>
-            </div>
+                            <input type="email" id="email" name="email" require
