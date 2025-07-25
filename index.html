@@ -517,10 +517,21 @@ body {
 
 .footer-brand .logo {
     font-size: 1.8rem;
-    background: linear-gradient(45deg, #5b16e4, #fdb128);
+    background: linear-gradient(45deg, #5b16e4, #fdb128, #5b16e4, #fdb128);
+    background-size: 300% 300%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
 }
 
 .footer-brand .tagline {
@@ -532,6 +543,31 @@ body {
     color: rgba(255, 255, 255, 0.7);
     line-height: 1.6;
     margin-bottom: 1.5rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.social-link:hover {
+    background: linear-gradient(45deg, #fdb128, #5b16e4);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .social-links {
@@ -734,20 +770,6 @@ body {
         text-align: center;
     }
 
-    .social-links {
-        justify-content: center;
-    }
-
-    .footer-bottom {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
-    }
-
-    .footer-legal {
-        justify-content: center;
-    }
-
     .certifications {
         justify-content: center;
         flex-wrap: wrap;
@@ -932,21 +954,7 @@ body {
                     <p class="footer-description">
                         Transforming business complexity into streamlined IT solutions. We specialize in cloud integration, identity management, and enterprise system optimization to help your organization thrive in the digital landscape.
                     </p>
-                    <div class="certifications">
-                        <span class="cert-badge">Microsoft Certified</span>
-                        <span class="cert-badge">Azure Expert</span>
-                    </div>
-                    <div class="social-links">
-                        <a href="#" class="social-link" aria-label="LinkedIn">
-                            <span>💼</span>
-                        </a>
-                        <a href="#" class="social-link" aria-label="Twitter">
-                            <span>🐦</span>
-                        </a>
-                        <a href="#" class="social-link" aria-label="Email">
-                            <span>✉️</span>
-                        </a>
-                    </div>
+
                 </div>
 
                 <div class="footer-section">
@@ -954,6 +962,48 @@ body {
                     <ul class="footer-links">
                         <li><a href="#services">Cloud Integration</a></li>
                         <li><a href="#services">Identity Management</a></li>
-                        <li><a href="#services">Azure Consulting</a></li>
                         <li><a href="#services">System Optimization</a></li>
-                        <li><a href="#services">IT
+                        <li><a href="#services">IT Infrastructure</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#clients">Our Clients</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <ul class="contact-info">
+                        <li>
+                            <span class="icon">📧</span>
+                            <span>info@emorphit.com</span>
+                        </li>
+                        <li>
+                            <span class="icon">📱</span>
+                            <span>Available by appointment</span>
+                        </li>
+                        <li>
+                            <span class="icon">🌐</span>
+                            <span>Serving businesses nationwide</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom">
+                <div class="copyright">
+                    <p>&copy; 2025 Emorph IT. All rights reserved.</p>
+                </div>
+                <div class="footer-legal">
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Use</a>
+                </div>
+            </div>
