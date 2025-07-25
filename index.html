@@ -313,6 +313,74 @@ body {
     opacity: 0.3;
 }
 
+/* Client Logos Section */
+.client-logos {
+    padding: 4rem 2rem;
+    background: white;
+    text-align: center;
+}
+
+.logos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3rem;
+    align-items: center;
+    justify-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.logo-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    height: 120px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.logo-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(45deg, #fdb128, #5b16e4);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.logo-item:hover::before {
+    transform: scaleX(1);
+}
+
+.logo-item:hover {
+    background: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+.client-logo {
+    max-width: 100%;
+    max-height: 80px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: grayscale(100%) opacity(0.7);
+    transition: all 0.3s ease;
+}
+
+.client-logo:hover {
+    filter: grayscale(0%) opacity(1);
+    transform: scale(1.05);
+}
+
 /* Testimonials */
 .testimonials {
     padding: 4rem 2rem;
@@ -449,6 +517,20 @@ body {
         margin: 0 1rem;
     }
 
+    .logos-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .logo-item {
+        height: 100px;
+        padding: 1rem;
+    }
+
+    .client-logo {
+        max-height: 60px;
+    }
+
     .logo-section {
         flex-direction: column;
         text-align: center;
@@ -533,6 +615,33 @@ body {
                     <div class="elevator-pitch">
                         <p>"I founded Emorph IT to help organizations eliminate the noise from their digital ecosystems. With multiple Microsoft Certifications and years of hands-on experience, I translate technical complexity into clean, efficient, and secure solutions—so your technology works for you, not against you."</p>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Client Logos Section -->
+    <section class="client-logos">
+        <div class="container">
+            <h2 class="section-title">Trusted by Leading Organizations</h2>
+            <div class="logos-grid">
+                <div class="logo-item">
+                    <img src="client-logo-1.jpg" alt="Client 1" class="client-logo">
+                </div>
+                <div class="logo-item">
+                    <img src="client-logo-2.jpg" alt="Client 2" class="client-logo">
+                </div>
+                <div class="logo-item">
+                    <img src="client-logo-3.jpg" alt="Client 3" class="client-logo">
+                </div>
+                <div class="logo-item">
+                    <img src="client-logo-4.jpg" alt="Client 4" class="client-logo">
+                </div>
+                <div class="logo-item">
+                    <img src="client-logo-5.jpg" alt="Client 5" class="client-logo">
+                </div>
+                <div class="logo-item">
+                    <img src="client-logo-6.jpg" alt="Client 6" class="client-logo">
                 </div>
             </div>
         </div>
@@ -646,7 +755,7 @@ body {
         }, observerOptions);
 
         // Observe service cards and other elements
-        document.querySelectorAll('.service-card, .testimonial-card').forEach(el => {
+        document.querySelectorAll('.service-card, .testimonial-card, .logo-item').forEach(el => {
             observer.observe(el);
         });
     </script>
